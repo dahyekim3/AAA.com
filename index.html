@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>AAA.com - Airline Review Analytics</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7f9; margin: 0; color: #333; font-size: 15px; }
+        
+        .navbar { background: #000c66; padding: 20px 50px; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+        .nav-title { font-size: 34px; font-weight: 700; }
+        .logo-img { height: 38px; }
+        .live-status { background: #059669; color: #fff; padding: 7px 18px; font-size: 14px; font-weight: bold; animation: blink 2s infinite; border-radius: 4px; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        .container { max-width: 1200px; margin: 30px auto; display: flex; gap: 30px; }
+        
+        /* 상단 데이터 개요 및 AI 분류 기준 배너 */
+        .meta-summary-box { background: #fff; padding: 20px; border-radius: 6px; margin-bottom: 25px; box-shadow: 0 3px 6px rgba(0,0,0,0.06); border-top: 4px solid #000c66; display: flex; justify-content: space-between; align-items: center; }
+        .meta-title { font-size: 16px; font-weight: 700; color: #1e293b; }
+        .meta-desc { font-size: 13.5px; color: #64748b; margin-top: 5px; line-height: 1.5; }
+        .meta-stat { font-size: 24px; font-weight: 700; color: #000c66; text-align: right; }
+        .meta-stat span { font-size: 14px; color: #64748b; font-weight: normal; }
+
+        .tabs { display: flex; gap: 12px; margin-bottom: 20px; }
+        .tab-btn { padding: 12px 24px; background: #ddd; cursor: pointer; border-radius: 4px; font-weight: 700; color: #555; }
+        .tab-btn.active { background: #000c66; color: #fff; }
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+
+        /* 탭 내부 AI 언어학적 분류 가이드 안내구간 */
+        .ai-criteria-banner { background: #f8fafc; border: 1px dashed #cbd5e1; padding: 15px 18px; border-radius: 4px; margin-bottom: 15px; font-size: 13.5px; color: #475569; line-height: 1.6; }
+        .ai-criteria-banner strong { color: #000c66; }
+        .ai-criteria-banner code { background: #e2e8f0; padding: 2px 5px; border-radius: 3px; font-family: monospace; font-size: 12px; color: #b91c1c; }
+
+        .log-item { background: #fff; padding: 24px; border-radius: 6px; margin-bottom: 18px; border-left: 6px solid #000c66; }
+        .review-title { font-size: 20px; font-weight: 700; color: #000; margin-bottom: 10px; }
+        .review-meta { font-size: 13px; color: #777; margin-bottom: 12px; font-weight: 700; }
+        .review-body { font-size: 15px; line-height: 1.7; margin-bottom: 18px; }
+        .action-box { background: #fdfdfd; border: 1px solid #eee; padding: 15px; font-size: 14px; color: #333; }
+
+        .sidebar { flex: 1; }
+        .panel { background: #fff; padding: 24px; border-radius: 6px; margin-bottom: 22px; box-shadow: 0 3px 6px rgba(0,0,0,0.06); }
+        .panel h2 { font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 12px; color: #444; text-align: center; margin-top:0; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 12px; text-align: center; font-size: 15px; color: #000; font-weight: bold; }
+        .data-table td { padding: 14px; border-bottom: 1px solid #f0f0f0; }
+        
+        .trending-box { text-align: center; font-size: 15px; font-weight: bold; color: #b91c1c; }
+        .trending-item { margin: 12px 0; opacity: 0; animation: slideUp 1s forwards; }
+        .item1 { animation-delay: 0.2s; } .item2 { animation-delay: 0.5s; } .item3 { animation-delay: 0.8s; }
+        @keyframes slideUp { 0% { transform: translateY(10px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+        .chart-dot { animation: blink-dot 1s infinite; fill: #059669; }
+        @keyframes blink-dot { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <div class="nav-title">AAA.com</div>
+        <img src="ba_logo_transparent.png" class="logo-img" alt="Logo">
+    </div>
+    <div class="live-status">● 모니터링 중</div>
+</div>
+
+<div class="container" style="flex-direction: column; margin-bottom: 0;">
+    <div class="meta-summary-box">
+        <div>
+            <div class="meta-title">📊 코퍼스 (Corpus) 텍스트 마이닝 기반 리뷰 모니터링 시스템</div>
+            <div class="meta-desc">영국항공(BA) 데이터셋 내 부정 리뷰들의 <strong>어휘 결합 구조와 극성(Polarity) 패턴</strong>을 AI 모델로 식별하여 리스크를 실시간 분류합니다.</div>
+        </div>
+        <div class="meta-stat">
+            3,701 개<br><span>전체 분석 리뷰 총량</span>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="margin-top: 0;">
+    <div style="flex: 2;">
+        <div class="tabs">
+            <div class="tab-btn active" onclick="showTab('high-risk')">이탈 위험(High-Risk)</div>
+            <div class="tab-btn" onclick="showTab('general')">단순 불만(General)</div>
+        </div>
+        
+        <div id="high-risk" class="content-section active">
+            <div class="ai-criteria-banner">
+                <strong>💡 AI 언어학적 식별 기준 (군집 비중: __._%):</strong> 텍스트 내에 <code>Never fly again</code>, <code>Worst service</code>, <code>Extremely rude</code> 등 감정적 극단 표현과 미래 행동의 단절(재이용 불가) 의사가 결합된 고위험 텍스트 양상입니다.
+            </div>
+            <div class="log-item" style="border-left-color: #ba0c2f;">
+                <div class="review-title">"Worst experience ever"</div>
+                <div class="review-meta">J.Doe | 23년 09월 30일 | Milan to San Jose via London | Boeing 777</div>
+                <div class="review-body">Staff was extremely rude and the flight was delayed by 5 hours. Never again.</div>
+                <div class="action-box">고객 이탈 가능성 매우 높음. CS 매니저 직접 유선 연락하여 사과 및 보상 바우처 제공 필요.</div>
+            </div>
+            <div class="log-item" style="border-left-color: #ba0c2f;">
+                <div class="review-title">"Lost my luggage"</div>
+                <div class="review-meta">Nigel Dean | 23년 09월 22일 | Prague to San Francisco via London | Boeing 747</div>
+                <div class="review-body">They lost my bag and offered no compensation. Terrible service.</div>
+                <div class="action-box">브랜드 신뢰도 심각 훼손. 24시간 내 수하물 위치 파악 및 배송, 배상금 지급 조치 착수 요함.</div>
+            </div>
+            <div class="log-item" style="border-left-color: #ba0c2f;">
+                <div class="review-title">"Rude Manager"</div>
+                <div class="review-meta">G.Kim | 23년 09월 09일 | Kuwait to Lisbon via London | Airbus A320</div>
+                <div class="review-body">Manager rolled eyes when I asked for water. Unacceptable.</div>
+                <div class="action-box">인적 서비스 실패 사례. 승무원 및 관리자 대상 서비스 재교육 및 고객 사과문 발송 요함.</div>
+            </div>
+        </div>
+
+        <div id="general" class="content-section">
+            <div class="ai-criteria-banner">
+                <strong>💡 AI 언어학적 식별 기준 (군집 비중: __._%):</strong> 텍스트 내에 <code>Cold food</code>, <code>Disappointing but...</code>, <code>Old plane</code> 등 기재 및 인프라 상태에 국한된 단편적인 품질 비판 양상으로, 역접 접속사(<code>but</code>, <code>however</code>)를 수반하는 논리적 텍스트 패턴입니다.
+            </div>
+            <div class="log-item">
+                <div class="review-title">"Cold food"</div>
+                <div class="review-meta">A.Smith | 23년 11월 19일 | Brussels to London | Airbus A320</div>
+                <div class="review-body">The seat was filthy and the food was inedible.</div>
+                <div class="action-box">기내 위생 및 품질 관리 미흡. 위생 관리팀 현장 개선 조치 및 차후 밀 업그레이드 고려함.</div>
+            </div>
+            <div class="log-item">
+                <div class="review-title">"Great staff but old plane"</div>
+                <div class="review-meta">B.Kim | 23년 11월 16일 | London to Dublin | Airbus A319</div>
+                <div class="review-body">Cabin staff were lovely, but the plane felt old.</div>
+                <div class="action-box">기재 노후화 확인. 좌석 업그레이드 쿠폰 제공으로 고객 경험 개선 권고함.</div>
+            </div>
+            <div class="log-item">
+                <div class="review-title">"Entertainment fail"</div>
+                <div class="review-meta">D.Park | 23년 11월 12일 | Bucharest to Manchester via London | Airbus A320</div>
+                <div class="review-body">Screens were frozen half the time. Very disappointing.</div>
+                <div class="action-box">엔터테인먼트 시스템 점검 기록 공유. 고객에게 보상 포인트 적립 처리함.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="panel">
+            <h2>AI 추출 위험 키워드별 빈도 (Top 3)</h2>
+            <table class="data-table">
+                <tr><td>1. Flight (운항/지연)</td><td>____회</td></tr>
+                <tr><td>2. Seat (좌석/기재)</td><td>____회</td></tr>
+                <tr><td>3. Service (서비스 질)</td><td>____회</td></tr>
+            </table>
+        </div>
+
+        <div class="panel">
+            <h2>누적 불만족 노선 (Top 3)</h2>
+            <table class="data-table">
+                <tr><td>1. London - Cape Town</td><td>__건</td></tr>
+                <tr><td>2. London - Johannesburg</td><td>__건</td></tr>
+                <tr><td>3. Johannesburg - London</td><td>__건</td></tr>
+            </table>
+        </div>
+
+        <div class="panel">
+            <h2>자주 사용된 불만 언어 (Top 3)</h2>
+            <table class="data-table">
+                <tr><td>▲ Never Again (재이용 불가)</td><td>___건</td></tr>
+                <tr><td>▲ Hours Delayed (장시간 지연)</td><td>___건</td></tr>
+                <tr><td>▲ Extremely Rude (승무원 태도)</td><td>___건</td></tr>
+            </table>
+        </div>
+
+        <div class="panel">
+            <h2>분기별 만족도 추이</h2>
+            <svg width="340" height="180" viewBox="0 0 300 150">
+                <line x1="45" y1="120" x2="280" y2="120" stroke="#333" />
+                <line x1="45" y1="120" x2="45" y2="10" stroke="#333" />
+                <text x="12" y="15" style="font-size:10px">100%</text><text x="15" y="36" style="font-size:10px">80%</text><text x="15" y="57" style="font-size:10px">60%</text><text x="15" y="78" style="font-size:10px">40%</text><text x="15" y="99" style="font-size:10px">20%</text>
+                
+                <text x="40" y="140" style="font-size:10px">16-05</text><text x="90" y="140" style="font-size:10px">18-03</text><text x="140" y="140" style="font-size:10px">20-01</text><text x="190" y="140" style="font-size:10px">21-11</text><text x="240" y="140" style="font-size:10px">23-11</text>
+                
+                <polyline fill="none" stroke="#059669" stroke-width="2" points="45,80 95,85 145,80 195,95 245,90" />
+                <circle cx="245" cy="90" r="5" fill="#059669" class="chart-dot" />
+            </svg>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showTab(id) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+</script>
+</body>
+</html>
